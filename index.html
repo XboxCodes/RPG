@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Layout</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="level">
+         <div class="level-circle">Level</div>
+          <p class="player-name">Player Name</p>
+          <p class="player-gold">Gold: 1000</p>
+          <div class="exp-bar-container">
+            <div class="exp-bar"></div>
+          </div>
+    <div class="main-content">
+    <div class="map-tabs">
+        <button class="tab" onclick="selectMap('Forest')">Map 1: Forest</button>
+        <button class="tab" onclick="selectMap('Cave')">Map 2: Cave</button>
+        <button class="tab" onclick="selectMap('Desert')">Map 3: Desert</button>
+        <button class="tab" onclick="selectMap('Swamp')">Map 4: Swamp</button>
+        <button class="tab" onclick="selectMap('Ocean')">Map 5: Ocean</button>
+        <button class="tab" onclick="selectMap('Graveyard')">Map 6: Graveyard</button>
+        <button class="tab" onclick="selectMap('Volcano')">Map 7: Volcano</button>
+    </div>
+    <div class="tab-content">
+        <div class="enemy-area">
+            <h2 id="current-map">Select a Map</h2>
+            <div class="enemy-image">
+                <img id="map-image" src="" alt="Map Image" style="display: none;">
+                <button id="fight-button" onclick="startFight()">Fight</button>
+            </div>
+            <div class="fight-activity">Fight Activity</div>
+        </div>
+    </div>
+</div>
+  </div>    
+<script src="script.js"></script>
+</body>
+</html>

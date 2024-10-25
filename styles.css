@@ -1,0 +1,159 @@
+body {
+    font-family: Arial, sans-serif;
+    background: url('https://logandtest.neocities.org/images/gamebackground.png') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    color: #000;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 20%;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.level {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.level-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #000;
+    display: inline-block;
+    line-height: 100px;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.player-name {
+    color: green;
+    margin-bottom: 5px;
+}
+
+.player-gold {
+    color: yellow;
+    margin-bottom: 15px;
+}
+
+.exp-bar-container {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.exp-bar {
+    height: 10px;
+    background-color: purple;
+    border-radius: 5px;
+}
+
+.sidebar-button {
+    background-color: #555;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.sidebar-button:hover {
+    background-color: #777;
+}
+
+.main-content {
+    flex: 1;
+    background-color: rgba(255, 192, 203, 0.7); /* Semi-transparent pink */
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+}
+
+.map-tabs {
+    display: flex;
+    justify-content: center; /* Center the tabs */
+    margin-bottom: 10px;
+    flex-wrap: wrap; /* Ensure tabs wrap if there's not enough space */
+}
+
+.tab {
+    background-color: #555;
+    color: #fff;
+    border: none;
+    padding: 10px 15px; /* Smaller padding for compact tabs */
+    margin: 5px; /* Small space between tabs */
+    text-align: center;
+    cursor: pointer;
+    flex: 0 0 auto; /* Tabs do not stretch */
+    min-width: 80px; /* Ensure tabs have a minimum width for readability */
+}
+
+.tab:hover {
+    background-color: #777;
+}
+
+.tab-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    flex: 1; /* Allow the content area to fill remaining spac
+}
+
+.enemy-area {
+    background-color: #fff;
+    padding: 20px;
+    border: 2px solid #000;
+    height: 600px; /* Keeps the box large enough for content */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.enemy-image {
+    background-color: #eee;
+    width: 100%;
+    height: 500px; /* Height for the enemy images */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #000;
+    overflow: hidden; /* Ensures images stay within the box */
+}
+
+#map-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: none;
+}
+
+#fight-button {
+    background-color: #444;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px; /* Adds some space above the button */
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 80px; /* Positions the button near the bottom of the enemy image */
+    display: none;
+}
+
+#fight-button:hover {
+    background-color: #666;
+}
