@@ -36,26 +36,58 @@ body {
     margin-bottom: 10px;
 }
 
-.player-name {
-    color: green;
-    margin-bottom: 5px;
+.player-info {
+    position: absolute; /* Position it in the top-left */
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.8); /* Black background with slight transparency */
+    color: #fff; /* White text for readability */
+    padding: 10px;
+    border-radius: 5px; /* Rounded corners */
+    width: 200px; /* Adjust width as needed */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add a shadow for better visibility */
 }
 
-.player-gold {
-    color: yellow;
-    margin-bottom: 15px;
+.player-name, .player-gold {
+    margin: 5px 0; /* Small margin for spacing between items */
 }
+
+
+.player-health {
+    margin: 5px 0;
+}
+
+#enemy-health {
+    margin-top: 10px;
+    color: #f00; /* Red color for emphasis */
+}
+
 
 .exp-bar-container {
-    margin-top: 10px;
-    margin-bottom: 20px;
+    background-color: #333; /* Dark background for the bar */
+    height: 15px;
+    border-radius: 5px;
+    position: relative;
+    margin-top: 5px;
+    width: 100%;
 }
 
 .exp-bar {
-    height: 10px;
+    height: 100%;
     background-color: purple;
     border-radius: 5px;
+    width: 50%; /* Example width; adjust dynamically with JavaScript */
 }
+
+.exp-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    color: #fff;
+}
+
 
 .sidebar-button {
     background-color: #555;
@@ -79,6 +111,48 @@ body {
     display: flex;
     flex-direction: column; /* Stack content vertically */
 }
+
+
+.auth-section {
+    position: fixed; /* Change to fixed for a consistent position relative to the viewport */
+    top: 10px;
+    right: 20px; /* Adjusted right to give it some spacing */
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    width: 250px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    z-index: 1000; /* Ensure it's above other elements */
+}
+
+.auth-section input {
+    width: 90%;
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+.auth-section button {
+    background-color: #4caf50; /* Green for login/signup */
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 3px;
+    width: 45%;
+    display: inline-block;
+}
+
+.auth-section button:hover {
+    background-color: #45a049;
+}
+
+
+
 
 .map-tabs {
     display: flex;
@@ -110,6 +184,47 @@ body {
     box-sizing: border-box;
     flex: 1; /* Allow the content area to fill remaining spac
 }
+
+
+#home-section {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    width: 150px;
+    margin-top: 10px;
+}
+
+.healing-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heal-image {
+    width: 50px; /* Keep the image small */
+    height: 30px;
+    margin-bottom: 5px;
+}
+
+#heal-button {
+    background-color: #4caf50; /* Green color for healing */
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between image and text */
+    text-align: center;
+}
+
+#heal-button:hover {
+    background-color: #45a049;
+}
+
 
 .enemy-area {
     background-color: #fff;
