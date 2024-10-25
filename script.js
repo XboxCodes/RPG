@@ -35,10 +35,6 @@ if (!firebase.apps.length) {
     firebase.app(); // If already initialized, use that one
 }
 
-const db = firebase.firestore();
-const auth = firebase.auth();
-
-
 let currentMapImage = ''; // Variable to store the current map image URL
 let currentEnemyHealth = 0;
 let playerLevel = 1;
@@ -269,9 +265,6 @@ function resetToExploreMode() {
     document.getElementById('map-image').src = currentMapImage;
 }
 
-
-// Reference to the Firebase Auth service
-const auth = firebase.auth();
 
 // Sign up function
 function signUp() {
