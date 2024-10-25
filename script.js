@@ -18,6 +18,25 @@ const ogreImageUrl = 'https://iili.io/2fmqJDB.webp';
 const dementedHenImageUrl = 'https://iili.io/2fmfUcG.webp';
 const venomousSerpentImageUrl = 'https://iili.io/2fmqFiF.webp';
 const db = firebase.firestore();
+const firebaseConfig = {
+    apiKey: "AIzaSyAxYtustDYLAN2YJCmYCpGIe6LWAPdLo18",
+    authDomain: "logans-rpg.firebaseapp.com",
+    databaseURL: "https://logans-rpg.firebaseio.com",
+    projectId: "logans-rpg",
+    storageBucket: "logans-rpg.appspot.com",
+    messagingSenderId: "1059527936217",
+    appId: "1:1059527936217:web:31d68e592d6a0a78df96c8",
+    measurementId: "G-CX71SBX9X1"
+};
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+} else {
+    firebase.app(); // If already initialized, use that one
+}
+
+const db = firebase.firestore();
+const auth = firebase.auth();
 
 
 let currentMapImage = ''; // Variable to store the current map image URL
