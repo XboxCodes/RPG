@@ -1,181 +1,326 @@
-// Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyAxYtustDYLAN2YJCmYCpGIe6LWAPdLo18",
-    authDomain: "logans-rpg.firebaseapp.com",
-    databaseURL: "https://logans-rpg.firebaseio.com",
-    projectId: "logans-rpg",
-    storageBucket: "logans-rpg.appspot.com",
-    messagingSenderId: "1059527936217",
-    appId: "1:1059527936217:web:31d68e592d6a0a78df96c8",
-    measurementId: "G-CX71SBX9X1"
-};
+function login() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+  auth.signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Logged in successfully
+      const user = userCredential.user;
+      document.getElementById('auth-message').textContent = `Login successful! Welcome back, ${user.email}`;
+      loadPlayerData(user.uid); // Load player data from the database
+    })
+    .catch((error) => {
+      document.getElementById('auth-message').textContent = `Error: ${error.message}`;
+    });
+}
+const auth = firebase.auth();
+const ogreImageUrl = 'https://iili.io/2fmqJDB.webp';
+const dementedHenImageUrl = 'https://iili.io/2fmfUcG.webp';
+const venomousSerpentImageUrl = 'https://iili.io/2fmqFiF.webp';
 const db = firebase.firestore();
+
+
+let currentMapImage = ''; // Variable to store the current map image URL
+let currentEnemyHealth = 0;
+let playerLevel = 1;
+let currentEnemy = '';
+let currentEnemyAttackRange = [0, 0];
+let playerEXP = 0;
+let maxPlayerEXP = 100;
+let isInHome = false;
+
+
+function selectMap(mapName) {
+    // Hide the home section when a map is selected
+    isInHome = false;
+    document.getElementById('home-section').style.display = 'none';
+
+    document.getElementById('current-map').innerText = `You are exploring the ${mapName}`;
+    const mapImage = document.getElementById('map-image');
+    const exploreButton = document.getElementById('explore-button');
+
+    const mapImages = {
+        'Forest': 'https://logandtest.neocities.org/images/Forest.png',
+        'Cave': 'https://logandtest.neocities.org/images/Cave.png',
+        'Desert': 'https://logandtest.neocities.org/images/Desert.png',
+        'Swamp': 'https://logandtest.neocities.org/images/Swamp.png',
+        'Ocean': 'https://logandtest.neocities.org/images/Ocean.png',
+        'Graveyard': 'https://logandtest.neocities.org/images/Graveyard.png',
+        'Volcano': 'https://logandtest.neocities.org/images/Volcano.png'
+    };
+
+    currentMapImage = mapImages[mapName] || '';
+    mapImage.src = currentMapImage;
+    mapImage.style.display = currentMapImage ? 'block' : 'none';
+
+    exploreButton.textContent = 'Explore';
+    exploreButton.classList.remove('attack-mode');
+    exploreButton.style.display = 'block';
+
+    document.getElementById('fight-message').textContent = "Click 'Explore' to find enemies.";
+    document.getElementById('enemy-health').style.display = 'none';
+    currentEnemy = '';
+    currentEnemyHealth = 0;
+    currentEnemyEXP = 0; // Reset EXP for the next battle
+}
+
+    currentMapImage = mapImages[mapName] || '';
+    mapImage.src = currentMapImage;
+    mapImage.style.display = currentMapImage ? 'block' : 'none';
+
+    exploreButton.textContent = 'Explore';
+    exploreButton.classList.remove('attack-mode');
+    exploreButton.style.display = 'block';
+
+
+
+   // Reset enemy information when selecting a new map
+    document.getElementById('fight-message').textContent = "Click 'Fight' to encounter enemies.";
+    document.getElementById('enemy-health').style.display = 'none';
+    currentEnemy = '';
+    currentEnemyHealth = 0;
+    currentEnemyEXP = 0;
+
+const maxPlayerHealth = 250;
+let playerHealth = maxPlayerHealth;
+
+function goHome() {
+    // Display the home section and set the player as being in the home menu
+    isInHome = true;
+    document.getElementById('home-section').style.display = 'block';
+    document.getElementById('fight-message').textContent = "Welcome to the Healing Center!";
+    document.getElementById('enemy-health').style.display = 'none';
+
+    // Hide the explore/attack button since we cannot battle in the home menu
+    document.getElementById('explore-button').style.display = 'none';
+}
+
+
+function healPlayer() {
+    // Restore player's health to full
+    playerHealth = maxPlayerHealth;
+
+    // Update the player's health display
+    document.getElementById('player-health').textContent = playerHealth;
+
+    // Show a message indicating the player is fully healed
+    document.getElementById('fight-message').textContent = "You have been healed to full health!";
+}
+
+
+
+function exploreOrAttack() {
+    // Prevent exploring or attacking while in the home menu
+    if (isInHome) {
+        document.getElementById('fight-message').textContent = "You cannot explore or attack while at home!";
+        return;
+    }
+
+    const exploreButton = document.getElementById('explore-button');
+
+    // Check if the button is in explore mode or attack mode
+    if (!exploreButton.classList.contains('attack-mode')) {
+        startExploration();
+    } else {
+        attackEnemy();
+    }
+}
+
+function startExploration() {
+    const mapImage = document.getElementById('map-image');
+    const fightMessage = document.getElementById('fight-message');
+    const enemyHealthDisplay = document.getElementById('enemy-health');
+    const currentEnemyHealthDisplay = document.getElementById('current-enemy-health');
+    const exploreButton = document.getElementById('explore-button');
+
+    // Ensure the home section is hidden when exploring
+    document.getElementById('home-section').style.display = 'none';
+    isInHome = false;
+
+    const randomNumber = Math.floor(Math.random() * 30);
+
+    if (randomNumber === 0) {
+        currentEnemy = 'Savage Ogre';
+        currentEnemyHealth = 130;
+        currentEnemyAttackRange = [7, 11];
+        currentEnemyEXP = 36;
+        mapImage.src = ogreImageUrl;
+        fightMessage.textContent = "A Savage Ogre has appeared!";
+    } else if (randomNumber === 1) {
+        currentEnemy = 'Demented Hen';
+        currentEnemyHealth = 70;
+        currentEnemyAttackRange = [8, 10];
+        currentEnemyEXP = 24;
+        mapImage.src = dementedHenImageUrl;
+        fightMessage.textContent = "A Demented Hen has appeared!";
+    } else if (randomNumber === 2) {
+        currentEnemy = 'Venomous Serpent';
+        currentEnemyHealth = 125;
+        currentEnemyAttackRange = [5, 12];
+        currentEnemyEXP = 30;
+        mapImage.src = venomousSerpentImageUrl;
+        fightMessage.textContent = "A Venomous Serpent has appeared!";
+    } else {
+        mapImage.src = currentMapImage;
+        fightMessage.textContent = "No enemies in sight. Keep exploring!";
+        return;
+    }
+
+    if (currentEnemy) {
+        exploreButton.textContent = 'Attack';
+        exploreButton.classList.add('attack-mode');
+        enemyHealthDisplay.style.display = 'block';
+        currentEnemyHealthDisplay.textContent = currentEnemyHealth;
+    }
+}
+
+
+
+function attackEnemy() {
+    const fightMessage = document.getElementById('fight-message');
+    const playerDamage = 12;
+    const enemyDamage = Math.floor(Math.random() * (currentEnemyAttackRange[1] - currentEnemyAttackRange[0] + 1)) + currentEnemyAttackRange[0];
+    const currentEnemyHealthDisplay = document.getElementById('current-enemy-health');
+    const playerHealthDisplay = document.getElementById('player-health');
+
+    currentEnemyHealth -= playerDamage;
+    fightMessage.textContent = `You attacked ${currentEnemy} for ${playerDamage} damage!`;
+
+    if (currentEnemyHealth <= 0) {
+        fightMessage.textContent += ` The ${currentEnemy} has been defeated!`;
+        currentEnemyHealthDisplay.textContent = '0';
+
+        // Award EXP to the player based on the defeated enemy
+        playerEXP += currentEnemyEXP;
+        updatePlayerStats();
+        
+        resetToExploreMode();
+        return;
+    }
+
+    currentEnemyHealthDisplay.textContent = currentEnemyHealth;
+
+    playerHealth -= enemyDamage;
+    fightMessage.textContent += ` The ${currentEnemy} attacked you for ${enemyDamage} damage!`;
+    playerHealthDisplay.textContent = playerHealth;
+
+    if (playerHealth <= 0) {
+        fightMessage.textContent += " You have been defeated! Game over.";
+        resetToExploreMode();
+    }
+
+    console.log(`Player health: ${playerHealth}, Enemy health: ${currentEnemyHealth}`);
+}
+
+
+function updatePlayerStats() {
+    const expBar = document.querySelector('.exp-bar');
+    const expText = document.querySelector('.exp-text');
+    const levelDisplay = document.querySelector('.level-circle');
+
+    // Calculate the percentage of current EXP
+    const expPercentage = (playerEXP / maxPlayerEXP) * 100;
+    expBar.style.width = `${expPercentage}%`;
+    expText.textContent = `EXP: ${playerEXP}/${maxPlayerEXP}`;
+
+    // Level up logic
+    if (playerEXP >= maxPlayerEXP) {
+        playerEXP -= maxPlayerEXP;
+        maxPlayerEXP += 120; // Increase EXP required for the next level
+        playerLevel += 1; // Increase the player's level
+        playerHealth = maxPlayerHealth; // Heal the player on level up
+
+        document.getElementById('player-health').textContent = playerHealth;
+        levelDisplay.textContent = playerLevel; // Update the level display
+        fightMessage.textContent = "You leveled up! Your health has been fully restored!";
+    }
+}
+
+
+
+
+function resetToExploreMode() {
+    const exploreButton = document.getElementById('explore-button');
+    exploreButton.textContent = 'Explore';
+    exploreButton.classList.remove('attack-mode');
+    document.getElementById('enemy-health').style.display = 'none';
+    currentEnemy = '';
+    currentEnemyHealth = 0;
+    currentEnemyEXP = 0;
+    document.getElementById('map-image').src = currentMapImage;
+}
+
+
+// Reference to the Firebase Auth service
 const auth = firebase.auth();
 
+// Sign up function
+function signUp() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
 
-
-function signUp(email, password) {
-    auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            const user = userCredential.user;
-            console.log("Signup successful for user:", user.email);
-            savePlayerData(user.uid); // Save initial player data
-        })
-        .catch((error) => {
-            console.error("Error during sign-up:", error.message);
-        });
+  auth.createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Signed up successfully
+      const user = userCredential.user;
+      document.getElementById('auth-message').textContent = `Signup successful! Welcome, ${user.email}`;
+      savePlayerData(user.uid); // Save initial player data to the database
+    })
+    .catch((error) => {
+      document.getElementById('auth-message').textContent = `Error: ${error.message}`;
+    });
 }
 
-function login(email, password) {
-    auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            const user = userCredential.user;
-            console.log("Login successful for user:", user.email);
-            loadPlayerData(user.uid); // Load player data after login
-        })
-        .catch((error) => {
-            console.error("Error during login:", error.message);
-        });
-}
 
 function savePlayerData(userId) {
-    const playerData = {
-        playerName: document.querySelector('.player-name').textContent,
-        playerLevel: playerLevel,
-        playerEXP: playerEXP,
-        maxPlayerEXP: maxPlayerEXP,
-        playerHealth: playerHealth,
-        maxPlayerHealth: maxPlayerHealth,
-        playerGold: parseInt(document.querySelector('.player-gold').textContent.replace('Gold: ', ''), 10)
-    };
+  const playerData = {
+    playerName: document.getElementById('player-name').textContent,
+    playerLevel: playerLevel,
+    playerEXP: playerEXP,
+    maxPlayerEXP: maxPlayerEXP,
+    playerHealth: playerHealth,
+    maxPlayerHealth: maxPlayerHealth,
+    playerGold: parseInt(document.getElementById('player-gold').textContent, 10)
+  };
 
-    db.collection('players').doc(userId).set(playerData)
-        .then(() => {
-            console.log("Player data saved successfully.");
-        })
-        .catch((error) => {
-            console.error("Error saving player data:", error);
-        });
+  db.collection('players').doc(userId).set(playerData)
+    .then(() => {
+      console.log('Player data saved successfully to Firestore.');
+    })
+    .catch((error) => {
+      console.error('Error saving player data to Firestore:', error);
+    });
 }
-
-function loadPlayerData(userId) {
-    db.collection('players').doc(userId).get()
-        .then((doc) => {
-            if (doc.exists) {
-                const data = doc.data();
-                document.querySelector('.player-name').textContent = data.playerName;
-                playerLevel = data.playerLevel;
-                playerEXP = data.playerEXP;
-                maxPlayerEXP = data.maxPlayerEXP;
-                playerHealth = data.playerHealth;
-                maxPlayerHealth = data.maxPlayerHealth;
-                document.querySelector('.player-gold').textContent = `Gold: ${data.playerGold}`;
-
-                updatePlayerStats();
-                console.log("Player data loaded successfully.");
-            } else {
-                console.log("No player data found. Initializing new player data.");
-                savePlayerData(userId); // Save default data if no data is found
-            }
-        })
-        .catch((error) => {
-            console.error("Error loading player data:", error);
-        });
-}
-
-
-
-
-
-
-
-
-function selectMap(mapName) {
-    // Update the map name display
-    document.getElementById('current-map').innerText = `You are exploring the ${mapName}`;
-    const mapImage = document.getElementById('map-image');
-    const fightButton = document.getElementById('fight-button');
-
-    // Define the map images
-    const mapImages = {
-        'Forest': 'https://logandtest.neocities.org/images/Forest.png',
-        'Cave': 'https://logandtest.neocities.org/images/Cave.png',
-        'Desert': 'https://logandtest.neocities.org/images/Desert.png',
-        'Swamp': 'https://logandtest.neocities.org/images/Swamp.png',
-        'Ocean': 'https://logandtest.neocities.org/images/Ocean.png',
-        'Graveyard': 'https://logandtest.neocities.org/images/Graveyard.png',
-        'Volcano': 'https://logandtest.neocities.org/images/Volcano.png'
-    };
-
-    // Update the src attribute of the map image based on the selected map
-    mapImage.src = mapImages[mapName] || '';
-    mapImage.style.display = mapImages[mapName] ? 'block' : 'none';
-
-    // Show the fight button only if a valid map is selected
-    if (mapImages[mapName]) {
-        fightButton.style.display = 'block';
-    } else {
-        fightButton.style.display = 'none';
-    }
-}
-
-
-const ogreImageUrl = 'https://iili.io/2fmo4Qp.webp';
-
-function selectMap(mapName) {
-    // Update the map name display
-    document.getElementById('current-map').innerText = `You are exploring the ${mapName}`;
-    const mapImage = document.getElementById('map-image');
-    const fightButton = document.getElementById('fight-button');
-
-    // Define the map images
-    const mapImages = {
-        'Forest': 'https://logandtest.neocities.org/images/Forest.png',
-        'Cave': 'https://logandtest.neocities.org/images/Cave.png',
-        'Desert': 'https://logandtest.neocities.org/images/Desert.png',
-        'Swamp': 'https://logandtest.neocities.org/images/Swamp.png',
-        'Ocean': 'https://logandtest.neocities.org/images/Ocean.png',
-        'Graveyard': 'https://logandtest.neocities.org/images/Graveyard.png',
-        'Volcano': 'https://logandtest.neocities.org/images/Volcano.png'
-    };
-
-    // Update the map image based on the selected map
-    mapImage.src = mapImages[mapName] || '';
-    mapImage.style.display = mapImages[mapName] ? 'block' : 'none';
-
-    // Show the fight button only if a valid map is selected
-    fightButton.style.display = mapImages[mapName] ? 'block' : 'none';
-}
-
-
 
 
 function startFight() {
-    // Get the map image element
     const mapImage = document.getElementById('map-image');
+    const fightMessage = document.getElementById('fight-message');
+    const attackButton = document.getElementById('attack-button');
 
-    // Generate a random number between 0 and 9 (10 possible outcomes)
-    const randomNumber = Math.floor(Math.random() * 10); // This will generate a number between 0 and 9
+    // Generate a random number between 0 and 29 (30 possible outcomes)
+    const randomNumber = Math.floor(Math.random() * 30); // Generates a number between 0 and 29
 
-    // Check if the random number is 0 (10% chance)
+    // Check the random number for each monster's chance to appear (10% chance each)
     if (randomNumber === 0) {
-        // If true, set the image source to the ogre image
+        // Ogre spawns
         mapImage.src = ogreImageUrl;
-        alert("An Ogre has appeared!");
+        fightMessage.textContent = "An Ogre has appeared!";
+    } else if (randomNumber === 1) {
+        // Demented Hen spawns
+        mapImage.src = dementedHenImageUrl;
+        fightMessage.textContent = "A Demented Hen has appeared!";
+    } else if (randomNumber === 2) {
+        // Venomous Serpent spawns
+        mapImage.src = venomousSerpentImageUrl;
+        fightMessage.textContent = "A Venomous Serpent has appeared!";
     } else {
-        // Otherwise, keep the current map image
-        alert("No enemies in sight. Keep exploring!");
+        // No monster appears, revert to the stored map image
+        mapImage.src = currentMapImage;
+        fightMessage.textContent = "No enemies in sight. Keep exploring!";
     }
 
-    // Log the random number for debugging (remove or comment out in production)
+    // Log for debugging purposes (can be removed in production)
     console.log("Random number generated:", randomNumber);
-}
-
-
-
-function startFight() {
-    // Add your fight logic here.
+    console.log("Map image source set to:", mapImage.src);
 }
