@@ -1,39 +1,13 @@
-function login() {
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
-
-  auth.signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      // Logged in successfully
-      const user = userCredential.user;
-      document.getElementById('auth-message').textContent = `Login successful! Welcome back, ${user.email}`;
-      loadPlayerData(user.uid); // Load player data from the database
-    })
-    .catch((error) => {
-      document.getElementById('auth-message').textContent = `Error: ${error.message}`;
-    });
+function login(username, password) {
+    const userData = loadUserData(username);
+    if (userData && userData.password === password) {
+        console.log("Login successful");
+        // Load player data and apply to game state
+    } else {
+        console.log("Incorrect username or password");
+    }
 }
-const auth = firebase.auth();
-const ogreImageUrl = 'https://iili.io/2fmqJDB.webp';
-const dementedHenImageUrl = 'https://iili.io/2fmfUcG.webp';
-const venomousSerpentImageUrl = 'https://iili.io/2fmqFiF.webp';
-const db = firebase.firestore();
-const firebaseConfig = {
-    apiKey: "AIzaSyAxYtustDYLAN2YJCmYCpGIe6LWAPdLo18",
-    authDomain: "logans-rpg.firebaseapp.com",
-    databaseURL: "https://logans-rpg.firebaseio.com",
-    projectId: "logans-rpg",
-    storageBucket: "logans-rpg.appspot.com",
-    messagingSenderId: "1059527936217",
-    appId: "1:1059527936217:web:31d68e592d6a0a78df96c8",
-    measurementId: "G-CX71SBX9X1"
-};
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-} else {
-    firebase.app(); // If already initialized, use that one
-}
 
 let currentMapImage = ''; // Variable to store the current map image URL
 let currentEnemyHealth = 0;
@@ -267,20 +241,17 @@ function resetToExploreMode() {
 
 
 // Sign up function
-function signUp() {
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
+function signUp(username, password) {
+    const data = {
+        password: password,
+        playerData: { level: 1, exp: 0, gold: 100 } // Example default data
+    };
+    saveUserData(username, data);
+    console.log("Sign-up successful");
+}
 
-  auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      // Signed up successfully
-      const user = userCredential.user;
-      document.getElementById('auth-message').textContent = `Signup successful! Welcome, ${user.email}`;
-      savePlayerData(user.uid); // Save initial player data to the database
-    })
-    .catch((error) => {
-      document.getElementById('auth-message').textContent = `Error: ${error.message}`;
-    });
+function saveUserData(username, data) {
+    localStorage.setItem(username, JSON.stringify(data));
 }
 
 
