@@ -1,11 +1,7 @@
-function login(username, password) {
-    const userData = loadUserData(username);
-    if (userData && userData.password === password) {
-        console.log("Login successful");
-        // Load player data and apply to game state
-    } else {
-        console.log("Incorrect username or password");
-    }
+function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    // Login logic using username and password
 }
 
 
@@ -231,13 +227,10 @@ function resetToExploreMode() {
 
 
 // Sign up function
-function signUp(username, password) {
-    const data = {
-        password: password,
-        playerData: { level: 1, exp: 0, gold: 100 } // Example default data
-    };
-    saveUserData(username, data);
-    console.log("Sign-up successful");
+function signUp() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    // Sign-up logic using username and password
 }
 
 function saveUserData(username, data) {
