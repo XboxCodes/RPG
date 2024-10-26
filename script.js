@@ -38,13 +38,6 @@ function selectMap(mapName) {
         'Volcano': 'https://logandtest.neocities.org/images/Volcano.png'
     };
 
-    currentMapImage = mapImages[mapName] || '';
-    mapImage.src = currentMapImage;
-    mapImage.style.display = currentMapImage ? 'block' : 'none';
-
-    exploreButton.textContent = 'Explore';
-    exploreButton.classList.remove('attack-mode');
-    exploreButton.style.display = 'block';
 
     document.getElementById('fight-message').textContent = "Click 'Explore' to find enemies.";
     document.getElementById('enemy-health').style.display = 'none';
@@ -53,9 +46,6 @@ function selectMap(mapName) {
     currentEnemyEXP = 0; // Reset EXP for the next battle
 }
 
-    currentMapImage = mapImages[mapName] || '';
-    mapImage.src = currentMapImage;
-    mapImage.style.display = currentMapImage ? 'block' : 'none';
 
     exploreButton.textContent = 'Explore';
     exploreButton.classList.remove('attack-mode');
