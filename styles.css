@@ -185,6 +185,35 @@ body {
     flex: 1; /* Allow the content area to fill remaining spac
 }
 
+.tab-forest {
+    background: url('https://logandtest.neocities.org/images/Forest.png') no-repeat center/cover;
+}
+
+.tab-cave {
+    background: url('https://logandtest.neocities.org/images/Cave.png') no-repeat center/cover;
+}
+
+.tab-desert {
+    background: url('https://logandtest.neocities.org/images/Desert.png') no-repeat center/cover;
+}
+
+.tab-swamp {
+    background: url('https://logandtest.neocities.org/images/Swamp.png') no-repeat center/cover;
+}
+
+.tab-ocean {
+    background: url('https://logandtest.neocities.org/images/Ocean.png') no-repeat center/cover;
+}
+
+.tab-graveyard {
+    background: url('https://logandtest.neocities.org/images/Graveyard.png') no-repeat center/cover;
+}
+
+.tab-volcano {
+    background: url('https://logandtest.neocities.org/images/Volcano.png') no-repeat center/cover;
+}
+
+    
 
 #home-section {
     background-color: rgba(0, 0, 0, 0.8);
