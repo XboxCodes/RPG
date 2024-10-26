@@ -197,6 +197,9 @@ function signUp() {
         playerData: { level: 1, exp: 0, gold: 100 }
     };
     saveUserData(username, data);
+
+    // Update the displayed player name
+    document.getElementById('player-name').textContent = username;
     console.log("Sign-up successful");
 }
 
