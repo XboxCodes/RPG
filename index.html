@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="
-  default-src 'self';
-  script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googleapis.com https://firebase.googleapis.com;
-  connect-src 'self' https://firebase.googleapis.com https://firestore.googleapis.com;
-">
 </head>
 <body>
   <div id="auth-section" class="auth-section">
         <h2>Login</h2>
-        <input type="email" id="login-email" placeholder="Email">
+        <input type="Username" id="login-user" placeholder="Username">
         <input type="password" id="login-password" placeholder="Password">
         <button onclick="login()">Login</button>
         <button onclick="signUp()">Sign Up</button>
@@ -68,47 +63,6 @@
  </div>
 </div>
   </div>    
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
-  const firebaseConfig = {
-    apiKey: "AIzaSyAxYtustDYLAN2YJCmYCpGIe6LWAPdLo18",
-    authDomain: "logans-rpg.firebaseapp.com",
-    databaseURL: "https://logans-rpg.firebaseio.com",
-    projectId: "logans-rpg",
-    storageBucket: "logans-rpg.appspot.com",
-    messagingSenderId: "1059527936217",
-    appId: "1:1059527936217:web:31d68e592d6a0a78df96c8",
-    measurementId: "G-CX71SBX9X1"
-  };
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-<!-- Add Firestore SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js"></script>
-<script>
-  // Initialize Firestore
-  const db = firebase.firestore();
-</script>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
-  const firebaseConfig = {
-    apiKey: "AIzaSyAxYtustDYLAN2YJCmYCpGIe6LWAPdLo18",
-    authDomain: "logans-rpg.firebaseapp.com",
-    projectId: "logans-rpg",
-    storageBucket: "logans-rpg.appspot.com",
-    messagingSenderId: "1059527936217",
-    appId: "1:1059527936217:web:31d68e592d6a0a78df96c8",
-    measurementId: "G-CX71SBX9X1"
-  };
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-// Reference to the Firebase Auth service
-const auth = firebase.auth();
 <link rel="stylesheet" href="styles.css">
 <script src="script.js" defer></script>
 </body>
